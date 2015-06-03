@@ -268,6 +268,24 @@ gbm_bo_write(struct gbm_bo *bo, const void *buf, size_t count)
    return bo->gbm->bo_write(bo, buf, count);
 }
 
+GBM_EXPORT void *
+gbm_bo_map(struct gbm_bo *bo)
+{
+   if (!bo->gbm->bo_map) {
+      errno = ENOSYS;
+      return NULL;
+   }
+
+   return bo->gbm->bo_map(bo);
+}
+
+GBM_EXPORT void
+gbm_bo_unmap(struct gbm_bo *bo)
+{
+   if (bo->gbm->bo_unmap)
+      bo->gbm->bo_unmap(bo);
+}
+
 /** Get the gbm device used to create the buffer object
  *
  * \param bo The buffer object

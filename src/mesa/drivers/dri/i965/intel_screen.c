@@ -803,6 +803,21 @@ intel_from_planar(__DRIimage *parent, int plane, void *loaderPrivate)
     return image;
 }
 
+static void *
+intel_map_image(__DRIimage *image)
+{
+   drm_intel_bo_map(image->bo, 1);
+   assert(image->bo->virtual);
+
+   return image->bo->virtual;
+}
+
+static void
+intel_unmap_image(__DRIimage *image)
+{
+   drm_intel_bo_unmap(image->bo);
+}
+
 static const __DRIimageExtension intelImageExtension = {
     .base = { __DRI_IMAGE, 11 },
 
@@ -818,6 +833,8 @@ static const __DRIimageExtension intelImageExtension = {
     .createImageFromTexture             = intel_create_image_from_texture,
     .createImageFromFds                 = intel_create_image_from_fds,
     .createImageFromDmaBufs             = intel_create_image_from_dma_bufs,
+    .mapImage                           = intel_map_image,
+    .unmapImage                         = intel_unmap_image,
     .blitImage                          = NULL,
     .getCapabilities                    = NULL
 };

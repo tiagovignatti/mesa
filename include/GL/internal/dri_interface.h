@@ -1317,6 +1317,10 @@ struct __DRIimageExtensionRec {
                                          unsigned *error,
                                          void *loaderPrivate);
 
+   void *(*mapImage)(__DRIimage *image);
+
+   void (*unmapImage)(__DRIimage *image);
+
    /**
     * Blit a part of a __DRIimage to another and flushes
     *

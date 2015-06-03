@@ -273,6 +273,12 @@ gbm_bo_get_handle(struct gbm_bo *bo);
 int
 gbm_bo_get_fd(struct gbm_bo *bo);
 
+void *
+gbm_bo_map(struct gbm_bo *bo);
+
+void
+gbm_bo_unmap(struct gbm_bo *bo);
+
 int
 gbm_bo_write(struct gbm_bo *bo, const void *buf, size_t count);
 

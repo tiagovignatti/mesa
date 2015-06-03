@@ -806,6 +806,27 @@ free_bo:
    return NULL;
 }
 
+static void *
+gbm_dri_bo_map2(struct gbm_bo *_bo)
+{
+   struct gbm_dri_device *dri = gbm_dri_device(_bo->gbm);
+   struct gbm_dri_bo *bo = gbm_dri_bo(_bo);
+
+   if (bo->image == NULL)
+      return NULL;
+
+   return dri->image->mapImage(bo->image);
+}
+
+static void
+gbm_dri_bo_unmap2(struct gbm_bo *_bo)
+{
+   struct gbm_dri_device *dri = gbm_dri_device(_bo->gbm);
+   struct gbm_dri_bo *bo = gbm_dri_bo(_bo);
+
+   dri->image->unmapImage(bo->image);
+}
+
 static struct gbm_bo *
 gbm_dri_bo_create(struct gbm_device *gbm,
                   uint32_t width, uint32_t height,
@@ -945,6 +966,8 @@ dri_device_create(int fd)
    dri->base.base.bo_write = gbm_dri_bo_write;
    dri->base.base.bo_get_fd = gbm_dri_bo_get_fd;
    dri->base.base.bo_destroy = gbm_dri_bo_destroy;
+   dri->base.base.bo_map = gbm_dri_bo_map2;
+   dri->base.base.bo_unmap = gbm_dri_bo_unmap2;
    dri->base.base.destroy = dri_destroy;
    dri->base.base.surface_create = gbm_dri_surface_create;
    dri->base.base.surface_destroy = gbm_dri_surface_destroy;
